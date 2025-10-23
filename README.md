@@ -1,7 +1,7 @@
 # Gestor Productos TechLab
 
 Proyecto final integrador — API REST con Spring Boot + JPA + MySQL  
-Autor: Marcela Adriana Serrano (reemplazá por tu nombre si querés)
+Autor: Marcela Adriana Serrano
 
 ## Resumen
 API para gestionar productos y pedidos. Funcionalidad:
