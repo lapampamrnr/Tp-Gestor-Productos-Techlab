@@ -1,22 +1,34 @@
 package com.techlab.gestorproductos.dto;
 
-import java.util.Map;
+public class ProductoResponse {
+    private Long id;
+    private String nombre;
+    private String descripcion;
+    private Double precio;
+    private String categoria;
+    private String imagenUrl;
+    private Integer stock;
 
-/**
- * DTO simple para crear pedidos.
- * Ejemplo JSON:
- * {
- *   "items": {
- *     "1": 2,
- *     "2": 1
- *   }
- * }
- */
-public class PedidoRequest {
-    private Map<Long, Integer> items;
+    public ProductoResponse() {}
 
-    public PedidoRequest() {}
+    public ProductoResponse(Long id, String nombre, String descripcion, Double precio, String categoria, String imagenUrl, Integer stock) {
+        this.id = id; this.nombre = nombre; this.descripcion = descripcion;
+        this.precio = precio; this.categoria = categoria; this.imagenUrl = imagenUrl; this.stock = stock;
+    }
 
-    public Map<Long, Integer> getItems() { return items; }
-    public void setItems(Map<Long, Integer> items) { this.items = items; }
+    // getters y setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public Double getPrecio() { return precio; }
+    public void setPrecio(Double precio) { this.precio = precio; }
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public String getImagenUrl() { return imagenUrl; }
+    public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
+    public Integer getStock() { return stock; }
+    public void setStock(Integer stock) { this.stock = stock; }
 }
