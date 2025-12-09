@@ -1,0 +1,61 @@
+package com.techlab.gestorproductos.service.impl;
+
+import com.techlab.gestorproductos.dto.PedidoRequest;
+import com.techlab.gestorproductos.exception.ResourceNotFoundException;
+import com.techlab.gestorproductos.model.LineaPedido;
+import com.techlab.gestorproductos.model.Pedido;
+import com.techlab.gestorproductos.model.Producto;
+import com.techlab.gestorproductos.repository.LineaPedidoRepository;
+import com.techlab.gestorproductos.repository.PedidoRepository;
+import com.techlab.gestorproductos.repository.ProductoRepository;
+import com.techlab.gestorproductos.service.PedidoService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
+
+@Service
+public class PedidoServiceImpl implements PedidoService {
+
+    private final PedidoRepository pedidoRepo;
+    private final ProductoRepository productoRepo;
+
+    public PedidoServiceImpl(PedidoRepository pedidoRepo, ProductoRepository productoRepo) {
+        this.pedidoRepo = pedidoRepo;
+        this.productoRepo = productoRepo;
+    }
+
+    @Override
+    @Transactional
+    public Pedido crearPedido(Map<Long, Integer> items) {
+        Pedido pedido = new Pedido();
+        for (Map.Entry<Long,Integer> e : items.entrySet()) {
+            Long pid = e.getKey();
+            Integer cantidad = e.getValue();
+            Producto prod = productoRepo.findById(pid)
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto no existe: " + pid));
+            if (prod.getStock() < cantidad) throw new IllegalArgumentException("Stock insuficiente para producto: " + pid);
+            prod.setStock(prod.getStock() - cantidad);
+            productoRepo.save(prod);
+
+            LineaPedido lp = new LineaPedido(prod, cantidad);
+            pedido.agregarLinea(lp);
+        }
+        return pedidoRepo.save(pedido);
+    }
+
+    @Override
+    public Pedido obtenerPorId(Long id) {
+        return pedidoRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido no encontrado: " + id));
+    }
+
+    @Override
+    public java.util.List<Pedido> listarTodos() {
+        return pedidoRepo.findAll();
+    }
+
+    @Override
+    public void eliminarPedido(Long id) {
+        pedidoRepo.deleteById(id);
+    }
+}
